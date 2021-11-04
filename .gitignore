@@ -1,0 +1,5 @@
+.vscode
+data.root
+*.pcm
+*.d
+*.so
