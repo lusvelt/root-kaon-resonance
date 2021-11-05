@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 string ParticleType::GetName() const {
     return fName;
 }

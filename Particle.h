@@ -3,6 +3,8 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
+using namespace std;
+
 class Particle {
     public:
         Particle();

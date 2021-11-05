@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cstdlib>
 
+using namespace std;
+
 int Particle::fNParticleType = 0;
 const ParticleType *Particle::fParticleType[Particle::fMaxNumParticleType];
 
@@ -55,7 +57,7 @@ void Particle::SetIndex(string particleName) {
     fIndex = index;
 }
 
-void Particle::AddParticleType(string particleName, const double mass, const int charge, const double width) {
+void Particle::AddParticleType(const string particleName, const double mass, const int charge, const double width) {
     if (fNParticleType >= fMaxNumParticleType) {
         std::cout << "Maximum number of particle types reached: cannot add new particle type" << std::endl;
         return;

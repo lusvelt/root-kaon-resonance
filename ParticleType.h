@@ -1,9 +1,11 @@
 #ifndef PARTICLE_TYPE_H
 #define PARTICLE_TYPE_H
 
+using namespace std;
+
 class ParticleType {
     public:
-        ParticleType(string name, const double mass, const int charge) :
+        ParticleType(const string name, const double mass, const int charge) :
             fName(name), fMass(mass), fCharge(charge) {}
         string GetName() const;
         double GetMass() const;
@@ -12,7 +14,7 @@ class ParticleType {
         virtual void Print() const;
 
     protected:
-        string fName;
+        const string fName;
         const double fMass;
         const int fCharge;
 };

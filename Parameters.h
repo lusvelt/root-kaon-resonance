@@ -1,14 +1,20 @@
 #include <string>
 
+using namespace std;
+
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
+
 const int N_PARTICLE_TYPES = 7;
 const int N_ITERATIONS = 1E5;
-const int N_PARTICLES = 100;
+const int N_PARTICLES_PER_ITERATION = 100;
 const int MAX_PRODUCTS = 200;
 const double AVG_P = 1.0;
-const int N_BINS = 200;
+const int N_BINS = 500;
 const double MAX_MOMENTUM = 5.0;
 const double MAX_ENERGY = 8.0;
-const double MAX_INVARIANT_MASS = 2.0;
+const double MIN_INVARIANT_MASS = 0.5;
+const double MAX_INVARIANT_MASS = 1.5;
 const double ERROR_FACTOR = 3.0;
 
 const int PION_PLUS_BIN = 1;
@@ -62,3 +68,5 @@ const double KAON_MINUS_CUMULATIVE = KAON_PLUS_CUMULATIVE + KAON_MINUS_PROB;
 const double PROTON_PLUS_CUMULATIVE = KAON_MINUS_CUMULATIVE + PROTON_PLUS_PROB;
 const double PROTON_MINUS_CUMULATIVE = PROTON_PLUS_CUMULATIVE + PROTON_MINUS_PROB;
 const double KAON_STAR_CUMULATIVE = PROTON_MINUS_CUMULATIVE + KAON_STAR_PROB;
+
+#endif
