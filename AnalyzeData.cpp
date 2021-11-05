@@ -2,15 +2,23 @@
 
 #include <TFile.h>
 #include <TH1D.h>
+#include <TF1.h>
+#include <TFitResultPtr.h>
+#include <TFitResult.h>
 #include <TObject.h>
+#include <TROOT.h>
+#include <TStyle.h>
+#include <TCanvas.h>
 #include <iostream>
 #include <cmath>
 
 using namespace std;
 
 void AnalyzeData() {
+    gROOT->SetBatch();
+
     // Open root file and retrieve histograms
-    TFile *file = new TFile("histograms.root", "UPDATE");
+    TFile *file = new TFile("histograms.root", "READ");
 
     TH1D *particleTypesH = (TH1D*) file->Get("particleTypesH");
     TH1D *finalParticleTypesH = (TH1D*) file->Get("finalParticleTypesH");
@@ -25,6 +33,11 @@ void AnalyzeData() {
     TH1D *discordantPionKaonInvMassH = (TH1D*) file->Get("discordantPionKaonInvMassH");
     TH1D *concordantPionKaonInvMassH = (TH1D*) file->Get("concordantPionKaonInvMassH");
     TH1D *daughtersInvMassH = (TH1D*) file->Get("daughtersInvMassH");
+
+    // Set styles for histograms and fit curves
+    gStyle->SetOptStat("RM");
+    gStyle->SetOptFit(111);
+    gROOT->ForceStyle();
 
     // Check number of entries of generation histograms
     if (particleTypesH->GetEntries() != N_PARTICLES_PER_ITERATION * N_ITERATIONS)
@@ -135,14 +148,6 @@ void AnalyzeData() {
     const double nDaughterPairs = nDaughters / 2;
     const double nDaughterPairsErr = nDaughtersErr / 2;
 
-    cout << "nPositiveParticlesPerIteration: " << nPositiveParticlesPerIteration << endl;
-    cout << "nPositiveParticlesPerIterationErr: " << nPositiveParticlesPerIterationErr << endl;
-    cout << "nNegativeParticlesPerIteration: " << nNegativeParticlesPerIteration << endl;
-    cout << "nNegativeParticlesPerIterationErr: " << nNegativeParticlesPerIterationErr << endl;
-    cout << "nDiscordantPairs: " << nDiscordantPairs << endl;
-    cout << "nDiscordantPairsErr: " << nDiscordantPairsErr << endl;
-    cout << "discordantInvMassH->GetEntries(): " << discordantInvMassH->GetEntries() << endl;
-
     // Check number of entries of invariant mass histograms
     if (abs(invMassH->GetEntries() - nPairs) > ERROR_FACTOR * nPairsErr)
         cout << "Number of entries of Invariant Mass Histogram is incorrect" << endl;
@@ -170,19 +175,59 @@ void AnalyzeData() {
         if (nProb < nParticles - ERROR_FACTOR * nParticlesErr || nProb > nParticles + ERROR_FACTOR * nParticlesErr)
             cout << "Number of " << LABELS[i - 1] << " particles is incorrect" << endl;
     }
-    
-    TFitResultPtr azimutAngleFit = azimutAngleH->Fit("pol0", "SQ");
-    TFitResultPtr polarAngleFit = polarAngleH->Fit("pol0", "SQ");
-    TFitResultPtr momentumFit = momentumH->Fit("expo", "SQ");
+
+    // Fit angles distribution and check uniformity
+    azimutAngleH->UseCurrentStyle();
+    azimutAngleH->Scale(1.0 / azimutAngleH->Integral(), "width"); // Normalization
+    azimutAngleH->Fit("pol0", "Q");
+
+    polarAngleH->Scale(1.0 / polarAngleH->Integral(), "width"); // Normalization
+    polarAngleH->Fit("pol0", "Q");
+
+    // Fit momentum with exponential distribution
+    momentumH->Fit("expo", "Q");
+
+    // Fit daughter invariant mass with normal distribution
+    daughtersInvMassH->Fit("gaus", "Q");
 
     // Check consistency of invariant mass histograms
     TH1D *pionKaonDiscordantMinusConcordantH = (TH1D *)discordantPionKaonInvMassH->Clone("pionKaonDiscordantMinusConcordantH");
     pionKaonDiscordantMinusConcordantH->Add(concordantPionKaonInvMassH, -1.0);
-    TFitResultPtr pionKaonDiscordantMinusConcordantFit = pionKaonDiscordantMinusConcordantH->Fit("gaus", "SQ");
-    
+    pionKaonDiscordantMinusConcordantH->Fit("gaus", "Q");
+    pionKaonDiscordantMinusConcordantH->SetTitle("Discordant-Concordant Pion/Kaon Invariant Mass Difference");
+
     TH1D *discordantMinusConcordantH = (TH1D *)discordantInvMassH->Clone("discordantMinusConcordantH");
     discordantMinusConcordantH->Add(concordantInvMassH, -1.0);
-    TFitResultPtr discordantMinusConcordantFit = discordantMinusConcordantH->Fit("gaus");
+    discordantMinusConcordantH->Fit("gaus", "Q");
+    discordantMinusConcordantH->SetTitle("Discordant-Concordant Invariant Mass Difference");
 
-    file->Write("", TObject::kOverwrite);
+    // Print histograms in files
+    TList *histograms = new TList();
+    histograms->Add(particleTypesH);
+    histograms->Add(azimutAngleH);
+    histograms->Add(polarAngleH);
+    histograms->Add(momentumH);
+    histograms->Add(transverseMomentumH);
+    histograms->Add(particleEnergyH);
+    histograms->Add(invMassH);
+    histograms->Add(discordantInvMassH);
+    histograms->Add(concordantInvMassH);
+    histograms->Add(discordantPionKaonInvMassH);
+    histograms->Add(concordantPionKaonInvMassH);
+    histograms->Add(daughtersInvMassH);
+    histograms->Add(pionKaonDiscordantMinusConcordantH);
+    histograms->Add(discordantMinusConcordantH);
+
+    TCanvas *canvas = new TCanvas();
+    for (TObject* &&histogram : *histograms) {
+        histogram->Draw();
+        string directory = "./histograms/";
+        string name = histogram->GetName();
+        string extension = ".png";
+        string fileName = directory + name + extension;
+        canvas->Print(fileName.c_str());
+    }
+
+    // Close root file
+    file->Close();
 }

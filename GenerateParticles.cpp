@@ -53,41 +53,52 @@ void GenerateParticles() {
     histograms->Add(finalParticleTypesH);
 
     TH1D *azimutAngleH = new TH1D("azimutAngleH", "Azimut Angle Distribution", N_BINS, 0, 2 * M_PI);
+    azimutAngleH->GetXaxis()->SetTitle("Angle (rad)");
     histograms->Add(azimutAngleH);
 
     TH1D *polarAngleH = new TH1D("polarAngleH", "Polar Angle Distribution", N_BINS, 0, M_PI);
+    polarAngleH->GetXaxis()->SetTitle("Angle (rad)");
     histograms->Add(polarAngleH);
 
     TH1D *momentumH = new TH1D("momentumH", "Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
+    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
     histograms->Add(momentumH);
 
     TH1D *transverseMomentumH = new TH1D("transverseMomentumH", "Transverse Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
+    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
     histograms->Add(transverseMomentumH);
 
     TH1D *particleEnergyH = new TH1D("particleEnergyH", "Particle Energy Distribution", N_BINS, 0, MAX_ENERGY);
+    momentumH->GetXaxis()->SetTitle("Energy (GeV)");
     histograms->Add(particleEnergyH);
 
     TH1D *invMassH = new TH1D("invMassH", "Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    invMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     invMassH->Sumw2();
     histograms->Add(invMassH);
 
     TH1D *discordantInvMassH = new TH1D("discordantInvMassH", "Discordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    discordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     discordantInvMassH->Sumw2();
     histograms->Add(discordantInvMassH);
 
     TH1D *concordantInvMassH = new TH1D("concordantInvMassH", "Concordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    concordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     concordantInvMassH->Sumw2();
     histograms->Add(concordantInvMassH);
 
-    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
+    discordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     discordantPionKaonInvMassH->Sumw2();
     histograms->Add(discordantPionKaonInvMassH);
 
-    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
+    concordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     concordantPionKaonInvMassH->Sumw2();
     histograms->Add(concordantPionKaonInvMassH);
 
-    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "K* Daughters Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "Resonance Daughters Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
+    daughtersInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     daughtersInvMassH->Sumw2();
     histograms->Add(daughtersInvMassH);
 

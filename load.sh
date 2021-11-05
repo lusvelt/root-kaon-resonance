@@ -5,5 +5,7 @@ root -l <<EOF
 .L Particle.cpp+
 .L GenerateParticles.cpp+
 GenerateParticles();
+.! cp histograms.root histograms_copy.root
+.L AnalyzeData.cpp+
+AnalyzeData();
 EOF
-cp histograms.root histograms_copy.root

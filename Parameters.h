@@ -10,11 +10,13 @@ const int N_ITERATIONS = 1E5;
 const int N_PARTICLES_PER_ITERATION = 100;
 const int MAX_PRODUCTS = 200;
 const double AVG_P = 1.0;
-const int N_BINS = 500;
+const int N_BINS = 200;
 const double MAX_MOMENTUM = 5.0;
 const double MAX_ENERGY = 8.0;
-const double MIN_INVARIANT_MASS = 0.5;
-const double MAX_INVARIANT_MASS = 1.5;
+const double MIN_INVARIANT_MASS = 0.0;
+const double MAX_INVARIANT_MASS = 2.0;
+const double MIN_INVARIANT_MASS_PEAK = 0.5;
+const double MAX_INVARIANT_MASS_PEAK = 1.5;
 const double ERROR_FACTOR = 3.0;
 
 const int PION_PLUS_BIN = 1;
