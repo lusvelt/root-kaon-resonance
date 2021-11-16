@@ -4,3 +4,7 @@
 *.d
 *.so
 output.*
+_minted*
+*.aux
+*.log
+*.gz
