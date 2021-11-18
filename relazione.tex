@@ -166,30 +166,61 @@ Innanzitutto verifichiamo, come mostrato qualitativamente nell'istogramma in alt
 \begin{figure}[hb!]
     \centering
     \includegraphics[width=\textwidth]{histograms/typesAndMomentum}
-    \caption{In alto a sx: istogramma dei tipi di particelle generati. I tre istogrammi rimanenti raffigurano le occorrenze delle coordinate polari dell'impulso.}
+    \caption{In alto a sx: istogramma dei tipi di particelle generati. I tre istogrammi rimanenti raffigurano le occorrenze delle coordinate polari dell'impulso. I fit sono rapresentati in rosso.}
     \label{fig:tipi}
 \end{figure}
 
-Analizzando, invece, i grafici delle coordinate polari dell'impulso (sempre in figura \ref{fig:tipi}) e la relativa tabella \ref{table:impulso}, si nota come i fit delle distribuzioni siano visivamente e quantitativamente (considerando i valori dei $\chi^2$ e dei gradi di libertà) compatibili con esse. In particolare il parametro del fit esponenziale sul modulo dell'impulso risulta compatibile, entro un certo errore, con il valore impostato in fase di generazione di $1$ GeV/c.
+Analizzando, invece, i grafici delle coordinate polari dell'impulso (sempre in figura \ref{fig:tipi}) e la relativa tabella \ref{table:impulso}, si nota come i fit delle distribuzioni siano visivamente e quantitativamente compatibili con esse, tenendo conto dei valori $\chi^2$ rispetto ai gradi di libertà e delle probabilità. In particolare il parametro (media) del fit esponenziale sul modulo dell'impulso risulta compatibile, entro $1\sigma$, con il valore impostato in fase di generazione di $1.0$ GeV/c.
 
-\begin{table}
+\begin{table}[h]
     \centering
     \begin{tabular}{||c|c|c|c|c||}
         \hline
         Distribuzione & Parametri Fit & $\chi^2$ & DOF & $\chi^2$/DOF \\
         \hline \hline
-        Angolo Polare $\theta$ & $0.3183 \pm 0.0001$ & 42.98 & 49 & 0.8771 \\
+        Angolo Polare $\theta$ & $(0.3183 \pm 0.0001)\ rad$ & 42.98 & 49 & 0.8771 \\
         \hline
-        Angolo Azimutale $\phi$ & $0.1592 \pm 0.0001$ & 44.59 & 49 & 0.9100 \\
+        Angolo Azimutale $\phi$ & $(0.1592 \pm 0.0001)\ rad$ & 44.59 & 49 & 0.9100 \\
         \hline
-        Modulo Impulso $|P|$ & $1.001 \pm 0.000$ & 540.1 & 49 & 11.0224 \\
+        Modulo Impulso $|P|$ & $(0.9998 \pm 0.0003)\ GeV/c$ & 34.32 & 48 & 0.7150 \\
         \hline
     \end{tabular}
     \caption{Dati relativi ai fit, uniformi per le distribuzioni degli angoli direzionali, ed esponenziale per quella del modulo dell'impulso.}
     \label{table:impulso}
 \end{table}
 
+Infine, passiamo ad analizzare i dati relativi ai valori di massa invariante. Per ottenere il segnale della risonanza K*, il cui picco effettivo è rappresentato nel primo grafico in figura \ref{fig:invMass}, si è fatto uso dei seguenti istogrammi:
+\begin{enumerate}
+    \item massa invariante tra le particelle di carica opposta
+    \item massa invariante tra le particelle di carica uguale
+    \item massa invariante tra pioni e kaoni di carica opposta
+    \item massa invariante tra pioni e kaoni di carica uguale
+\end{enumerate}
+Poichè la massa invariante tra particelle di carica concorde è composta solo da combinazioni accidentali, mentre quella tra particelle di carica discorde coinvolge sia combinazioni accidentali, che il segnale della risonanza (che infatti quando decade genera un pione e un kaone di carica discorde), sottraendo l'istogramma 2 dall'1 (grafico centrale in figura \ref{fig:invMass}) otteniamo un picco proprio in corrispondenza della massa di K*, e lo stesso vale a maggior ragione se teniamo conto solamente dei pioni e dei kaoni, come si osserva nel grafico in basso (figura \ref{fig:invMass}). Osservando i dati nella tabella \ref{table:invMass} relativi alle distribuzioni normali ottenute facendo fit sugli istogrammi di massa invariante, le considerazioni visive appena effettuate sono confermate, in particolare si può notare che i valori medi sono compatibili entro $1\sigma$ con la massa reale di K*, pari a 0.89166 $GeV/c^2$, e i valori di $\sigma$ sono compatibili con la larghezza della risonanza entro 3 deviazioni standard.
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{||c|c|c|c|c||}
+        \hline
+        Distribuzione & Media ($GeV/c^2$) & $\sigma\ (GeV/c^2)$ & Ampiezza ($GeV/c^2$) & $\chi^2/DOF$ \\
+        \hline \hline
+        Massa inv. K* & $(0.8918 \pm 0.0002)$ & $(0.0501 \pm 0.0001)$ & $(0.1504 \pm 0.0003)$ & 0.6061 \\
+        \hline
+        Discordi--Concordi & $(0.8922 \pm 0.0039)$ & $(0.0417 \pm 0.0038)$ & $(0.1251 \pm 0.0114)$ & 0.9363 \\
+        \hline
+        Disc.--Conc. ($\pi$, K) & $(0.8853 \pm 0.0027)$ & $(0.0514 \pm 0.0030)$ & $(0.1541 \pm 0.0090)$ & 0.9811 \\
+        \hline
+    \end{tabular}
+    \caption{Dati relativi ai fit degli istogrammi di massa invariante, rappresentati nella figura \ref{fig:invMass}.}
+    \label{table:invMass}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{histograms/invMass}
+    \caption{In alto: istogramma della massa invariante effettiva delle particelle K*, ottenuta combinando le figlie del decadimento. Al centro: differenza tra massa invariante di particelle con carica discorde e quella di particelle di carica concorde. In basso: differenza come nel caso precedente, ma tenendo conto solo dei pioni e dei kaoni.}
+    \label{fig:invMass}
+\end{figure}
 
 \pagebreak
 
@@ -208,14 +239,12 @@ const int N_ITERATIONS = 1E5;
 const int N_PARTICLES_PER_ITERATION = 100;
 const int MAX_PRODUCTS = 200;
 const double AVG_P = 1.0;
-const int N_BINS = 200;
+const int N_BINS = 50;
+const int N_BINS_INV_MASS = 100;
 const double MAX_MOMENTUM = 5.0;
 const double MAX_ENERGY = 8.0;
-const double MIN_INVARIANT_MASS = 0.0;
-const double MAX_INVARIANT_MASS = 2.0;
-const double MIN_INVARIANT_MASS_PEAK = 0.5;
-const double MAX_INVARIANT_MASS_PEAK = 1.5;
-const double ERROR_FACTOR = 3.0;
+const double MIN_INVARIANT_MASS = 0.5;
+const double MAX_INVARIANT_MASS = 1.5;
 
 const int PION_PLUS_BIN = 1;
 const int PION_MINUS_BIN = 2;
@@ -243,7 +272,7 @@ const double PROBABILITIES[] = {
     KAON_STAR_PROB
 };
 
-const string PION_PLUS_L, trattata nella prossima sezioneABEL = "π+";
+const string PION_PLUS_LABEL = "π+";
 const string PION_MINUS_LABEL = "π-";
 const string KAON_PLUS_LABEL = "K+";
 const string KAON_MINUS_LABEL = "K-";
@@ -628,85 +657,31 @@ void GenerateParticles() {
     Particle::AddParticleType("p-", 0.93827, -1);
     Particle::AddParticleType("K*", 0.89166, 0, 0.050);
 
-    // Histograms definitions
-    TList *histograms = new TList();
     
     // Save histograms in root file
     TFile *file = new TFile("histograms.root", "RECREATE");
 
+    // Histograms definitions
     TH1F *particleTypesH = new TH1F("particleTypesH", "Particle Types", N_PARTICLE_TYPES, 0, N_PARTICLE_TYPES);
-    particleTypesH->SetFillColor(kBlue);
-    particleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
-    particleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
-    particleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
-    particleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
-    particleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
-    particleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
-    particleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
-    particleTypesH->SetStats(false);
-    histograms->Add(particleTypesH);
-
     TH1F *finalParticleTypesH = new TH1F("finalParticleTypesH", "Final Particle Types", N_PARTICLE_TYPES, 0, N_PARTICLE_TYPES);
-    finalParticleTypesH->SetFillColor(kBlue);
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
-    finalParticleTypesH->SetStats(false);
-    histograms->Add(finalParticleTypesH);
+    TH1D *azimutAngleH = new TH1D("azimutAngleH", "Azimut Angle", N_BINS, 0, 2 * M_PI);
+    TH1D *polarAngleH = new TH1D("polarAngleH", "Polar Angle", N_BINS, 0, M_PI);
+    TH1D *momentumH = new TH1D("momentumH", "Momentum", N_BINS, 0, MAX_MOMENTUM);
+    TH1D *transverseMomentumH = new TH1D("transverseMomentumH", "Transverse Momentum", N_BINS, 0, MAX_MOMENTUM);
+    TH1D *particleEnergyH = new TH1D("particleEnergyH", "Particle Energy", N_BINS, 0, MAX_ENERGY);
+    TH1D *invMassH = new TH1D("invMassH", "Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *discordantInvMassH = new TH1D("discordantInvMassH", "Discordant Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *concordantInvMassH = new TH1D("concordantInvMassH", "Concordant Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "Resonance Daughters Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
 
-    TH1D *azimutAngleH = new TH1D("azimutAngleH", "Azimut Angle Distribution", N_BINS, 0, 2 * M_PI);
-    azimutAngleH->GetXaxis()->SetTitle("Angle (rad)");
-    histograms->Add(azimutAngleH);
-
-    TH1D *polarAngleH = new TH1D("polarAngleH", "Polar Angle Distribution", N_BINS, 0, M_PI);
-    polarAngleH->GetXaxis()->SetTitle("Angle (rad)");
-    histograms->Add(polarAngleH);
-
-    TH1D *momentumH = new TH1D("momentumH", "Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
-    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
-    histograms->Add(momentumH);
-
-    TH1D *transverseMomentumH = new TH1D("transverseMomentumH", "Transverse Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
-    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
-    histograms->Add(transverseMomentumH);
-
-    TH1D *particleEnergyH = new TH1D("particleEnergyH", "Particle Energy Distribution", N_BINS, 0, MAX_ENERGY);
-    momentumH->GetXaxis()->SetTitle("Energy (GeV)");
-    histograms->Add(particleEnergyH);
-
-    TH1D *invMassH = new TH1D("invMassH", "Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
-    invMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     invMassH->Sumw2();
-    histograms->Add(invMassH);
-
-    TH1D *discordantInvMassH = new TH1D("discordantInvMassH", "Discordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
-    discordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     discordantInvMassH->Sumw2();
-    histograms->Add(discordantInvMassH);
-
-    TH1D *concordantInvMassH = new TH1D("concordantInvMassH", "Concordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
-    concordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     concordantInvMassH->Sumw2();
-    histograms->Add(concordantInvMassH);
-
-    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
-    discordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     discordantPionKaonInvMassH->Sumw2();
-    histograms->Add(discordantPionKaonInvMassH);
-
-    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
-    concordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     concordantPionKaonInvMassH->Sumw2();
-    histograms->Add(concordantPionKaonInvMassH);
-
-    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "Resonance Daughters Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
-    daughtersInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     daughtersInvMassH->Sumw2();
-    histograms->Add(daughtersInvMassH);
 
     // Variable definitions
     Particle particles[N_PARTICLE_TYPES + MAX_PRODUCTS];
@@ -848,6 +823,133 @@ void GenerateParticles() {
 
 \subsection*{AnalyzeData.cpp}
 \begin{minted}[breaklines]{c}
+#include "Parameters.h"
+
+#include <TFile.h>
+#include <TH1D.h>
+#include <TF1.h>
+#include <TMath.h>
+#include <TFitResultPtr.h>
+#include <TFitResult.h>
+#include <TObject.h>
+#include <TROOT.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+void AnalyzeData() {
+    gROOT->SetBatch();
+
+    // Open root file and retrieve histograms
+    TFile *file = new TFile("histograms.root", "READ");
+
+    TH1D *particleTypesH = (TH1D*) file->Get("particleTypesH");
+    TH1D *azimutAngleH = (TH1D*) file->Get("azimutAngleH");
+    TH1D *polarAngleH = (TH1D*) file->Get("polarAngleH");
+    TH1D *momentumH = (TH1D*) file->Get("momentumH");
+    TH1D *discordantInvMassH = (TH1D*) file->Get("discordantInvMassH");
+    TH1D *concordantInvMassH = (TH1D*) file->Get("concordantInvMassH");
+    TH1D *discordantPionKaonInvMassH = (TH1D*) file->Get("discordantPionKaonInvMassH");
+    TH1D *concordantPionKaonInvMassH = (TH1D*) file->Get("concordantPionKaonInvMassH");
+    TH1D *daughtersInvMassH = (TH1D*) file->Get("daughtersInvMassH");
+
+    // Set styles for histograms
+    gStyle->SetOptStat("e");
+    gStyle->SetOptFit(1111);
+    particleTypesH->SetFillColor(kBlue);
+
+    // Set axes labels
+    particleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
+    particleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
+    particleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
+    particleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
+    particleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
+    particleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
+    particleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
+    particleTypesH->GetYaxis()->SetTitle("Occurrences");
+
+    azimutAngleH->GetXaxis()->SetTitle("Angle (rad)");
+    polarAngleH->GetXaxis()->SetTitle("Angle (rad)");
+    momentumH->GetXaxis()->SetTitle("Momentum (GeV/c)");
+    discordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    concordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    discordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    concordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    daughtersInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+
+    azimutAngleH->GetYaxis()->SetTitle("Frequency Density");
+    polarAngleH->GetYaxis()->SetTitle("Frequency Density");
+    momentumH->GetYaxis()->SetTitle("Frequency Density");
+    discordantInvMassH->GetYaxis()->SetTitle("Occurrences");
+    concordantInvMassH->GetYaxis()->SetTitle("Occurrences");
+    discordantPionKaonInvMassH->GetYaxis()->SetTitle("Occurrences");
+    concordantPionKaonInvMassH->GetYaxis()->SetTitle("Occurrences");
+    daughtersInvMassH->GetYaxis()->SetTitle("Frequency Density");
+
+    // Output partile type occurrences for the report table
+    cout << "Particle type occurrences:" << endl;
+    for (int i = 1; i <= N_PARTICLE_TYPES; i++)
+        cout << "\t" << LABELS[i - 1] << " " << particleTypesH->GetBinContent(i) << " +/- " << particleTypesH->GetBinError(i) << endl;
+
+    // Convert occurrencies into frequency density
+    azimutAngleH->Scale(1.0 / azimutAngleH->Integral("width"));
+    polarAngleH->Scale(1.0 / polarAngleH->Integral("width"));
+    momentumH->Scale(1.0 / momentumH->Integral("width"));
+    daughtersInvMassH->Scale(1.0 / daughtersInvMassH->Integral("width"));
     
+    // Fit histograms with the right distribution
+    azimutAngleH->Fit("pol0", "Q");         // Uniform
+    polarAngleH->Fit("pol0", "Q");          // Uniform
+    momentumH->Fit("expo", "Q");            // Exponential
+    daughtersInvMassH->Fit("gaus", "Q");    // Normal
+
+    // Output mean for momentum fit distribution
+    TF1 *momentumFit = momentumH->GetFunction("expo");
+    double momentumFitMean = -1.0 / momentumFit->GetParameter(1);
+    double momentumFitMeanError = abs(momentumFitMean * momentumFit->GetParError(1) / momentumFit->GetParameter(1));
+    cout << "Momentum Exponential Fit:" << endl;
+    cout << "\tMean: " << momentumFitMean << " +/- " << momentumFitMeanError << endl;
+
+    // Check consistency of invariant mass histograms
+    TH1D *pionKaonDiscordantMinusConcordantH = (TH1D*) discordantPionKaonInvMassH->Clone("pionKaonDiscordantMinusConcordantH");
+    pionKaonDiscordantMinusConcordantH->Add(concordantPionKaonInvMassH, -1.0);
+    pionKaonDiscordantMinusConcordantH->Fit("gaus", "Q");
+    pionKaonDiscordantMinusConcordantH->SetTitle("Discordant-Concordant Pion/Kaon Invariant Mass Difference");
+
+    TH1D *discordantMinusConcordantH = (TH1D*) discordantInvMassH->Clone("discordantMinusConcordantH");
+    discordantMinusConcordantH->Add(concordantInvMassH, -1.0);
+    discordantMinusConcordantH->Fit("gaus", "Q");
+    discordantMinusConcordantH->SetTitle("Discordant-Concordant Invariant Mass Difference");
+
+    // Save histograms in files for the final report
+    TCanvas *c1 = new TCanvas();
+    c1->Divide(2, 2);
+    c1->cd(1);
+    particleTypesH->Draw();
+    c1->cd(2);
+    azimutAngleH->Draw();
+    c1->cd(3);
+    polarAngleH->Draw();
+    c1->cd(4);
+    momentumH->Draw();
+    c1->SaveAs("./histograms/typesAndMomentum.tikz.tex");
+
+    gStyle->SetOptStat(0);
+    TCanvas *c2 = new TCanvas("c2", "Invariant Mass", 600, 800);
+    c2->Divide(1, 3);
+    c2->cd(1);
+    daughtersInvMassH->Draw();
+    c2->cd(2);
+    discordantMinusConcordantH->Draw();
+    c2->cd(3);
+    pionKaonDiscordantMinusConcordantH->Draw();
+    c2->SaveAs("./histograms/invMass.tikz.tex");
+
+    // Close root file
+    file->Close();
+}
 \end{minted}
 \end{document}

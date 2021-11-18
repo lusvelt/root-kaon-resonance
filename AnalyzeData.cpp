@@ -31,11 +31,12 @@ void AnalyzeData() {
     TH1D *concordantPionKaonInvMassH = (TH1D*) file->Get("concordantPionKaonInvMassH");
     TH1D *daughtersInvMassH = (TH1D*) file->Get("daughtersInvMassH");
 
-    // Set styles for histograms and fit curves
+    // Set styles for histograms
     gStyle->SetOptStat("e");
     gStyle->SetOptFit(1111);
-
     particleTypesH->SetFillColor(kBlue);
+
+    // Set axes labels
     particleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
     particleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
     particleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
@@ -54,74 +55,74 @@ void AnalyzeData() {
     concordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     daughtersInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
 
-    azimutAngleH->GetYaxis()->SetTitle("Probability Density");
-    polarAngleH->GetYaxis()->SetTitle("Probability Density");
-    momentumH->GetYaxis()->SetTitle("Probability Density");
+    azimutAngleH->GetYaxis()->SetTitle("Frequency Density");
+    polarAngleH->GetYaxis()->SetTitle("Frequency Density");
+    momentumH->GetYaxis()->SetTitle("Frequency Density");
     discordantInvMassH->GetYaxis()->SetTitle("Occurrences");
     concordantInvMassH->GetYaxis()->SetTitle("Occurrences");
     discordantPionKaonInvMassH->GetYaxis()->SetTitle("Occurrences");
     concordantPionKaonInvMassH->GetYaxis()->SetTitle("Occurrences");
-    daughtersInvMassH->GetYaxis()->SetTitle("Occurrences");
+    daughtersInvMassH->GetYaxis()->SetTitle("Frequency Density");
 
-    // Output data for tables
+    // Output partile type occurrences for the report table
     cout << "Particle type occurrences:" << endl;
     for (int i = 1; i <= N_PARTICLE_TYPES; i++)
-        cout << LABELS[i - 1] << " " << particleTypesH->GetBinContent(i) << " +/- " << particleTypesH->GetBinError(i) << endl;
+        cout << "\t" << LABELS[i - 1] << " " << particleTypesH->GetBinContent(i) << " +/- " << particleTypesH->GetBinError(i) << endl;
 
-    // Fit angles distribution and check uniformity
+    // Convert occurrencies into frequency density
     azimutAngleH->Scale(1.0 / azimutAngleH->Integral("width"));
-    azimutAngleH->Fit("pol0", "Q");
     polarAngleH->Scale(1.0 / polarAngleH->Integral("width"));
-    polarAngleH->Fit("pol0", "Q");
-
-    // Fit momentum with exponential distribution
-    TF1 *exponential = new TF1("exponential", "[0]*exp(-[0]*x)", 0.0, TMath::Infinity());
-    exponential->SetParameter(0, 1);
     momentumH->Scale(1.0 / momentumH->Integral("width"));
-    momentumH->Fit("exponential", "QW");
+    daughtersInvMassH->Scale(1.0 / daughtersInvMassH->Integral("width"));
+    
+    // Fit histograms with the right distribution
+    azimutAngleH->Fit("pol0", "Q");         // Uniform
+    polarAngleH->Fit("pol0", "Q");          // Uniform
+    momentumH->Fit("expo", "Q");            // Exponential
+    daughtersInvMassH->Fit("gaus", "Q");    // Normal
 
-    // Fit daughter invariant mass with normal distribution
-    daughtersInvMassH->Fit("gaus", "Q");
+    // Output mean for momentum fit distribution
+    TF1 *momentumFit = momentumH->GetFunction("expo");
+    double momentumFitMean = -1.0 / momentumFit->GetParameter(1);
+    double momentumFitMeanError = abs(momentumFitMean * momentumFit->GetParError(1) / momentumFit->GetParameter(1));
+    cout << "Momentum Exponential Fit:" << endl;
+    cout << "\tMean: " << momentumFitMean << " +/- " << momentumFitMeanError << endl;
 
     // Check consistency of invariant mass histograms
-    TH1D *pionKaonDiscordantMinusConcordantH = (TH1D *)discordantPionKaonInvMassH->Clone("pionKaonDiscordantMinusConcordantH");
+    TH1D *pionKaonDiscordantMinusConcordantH = (TH1D*) discordantPionKaonInvMassH->Clone("pionKaonDiscordantMinusConcordantH");
     pionKaonDiscordantMinusConcordantH->Add(concordantPionKaonInvMassH, -1.0);
     pionKaonDiscordantMinusConcordantH->Fit("gaus", "Q");
     pionKaonDiscordantMinusConcordantH->SetTitle("Discordant-Concordant Pion/Kaon Invariant Mass Difference");
 
-    TH1D *discordantMinusConcordantH = (TH1D *)discordantInvMassH->Clone("discordantMinusConcordantH");
+    TH1D *discordantMinusConcordantH = (TH1D*) discordantInvMassH->Clone("discordantMinusConcordantH");
     discordantMinusConcordantH->Add(concordantInvMassH, -1.0);
     discordantMinusConcordantH->Fit("gaus", "Q");
     discordantMinusConcordantH->SetTitle("Discordant-Concordant Invariant Mass Difference");
 
     // Save histograms in files for the final report
-    TCanvas *canvas;
-    
-    canvas = new TCanvas();
-    canvas->Divide(2, 2);
-    canvas->cd(1);
+    TCanvas *c1 = new TCanvas();
+    c1->Divide(2, 2);
+    c1->cd(1);
     particleTypesH->Draw();
-    canvas->cd(2);
+    c1->cd(2);
     azimutAngleH->Draw();
-    canvas->cd(3);
+    c1->cd(3);
     polarAngleH->Draw();
-    canvas->cd(4);
+    c1->cd(4);
     momentumH->Draw();
-    canvas->SaveAs("./histograms/typesAndMomentum.tikz.tex");
-    delete canvas;
+    c1->SaveAs("./histograms/typesAndMomentum.tikz.tex");
 
-    canvas = new TCanvas();
-    canvas->Divide(1, 3);
-    canvas->cd(1);
+    gStyle->SetOptStat(0);
+    TCanvas *c2 = new TCanvas("c2", "Invariant Mass", 600, 800);
+    c2->Divide(1, 3);
+    c2->cd(1);
     daughtersInvMassH->Draw();
-    canvas->cd(2);
+    c2->cd(2);
     discordantMinusConcordantH->Draw();
-    canvas->cd(3);
+    c2->cd(3);
     pionKaonDiscordantMinusConcordantH->Draw();
-    canvas->SaveAs("./histograms/invMass.tikz.tex");
-    delete canvas;
+    c2->SaveAs("./histograms/invMass.tikz.tex");
 
     // Close root file
     file->Close();
-    
 }
