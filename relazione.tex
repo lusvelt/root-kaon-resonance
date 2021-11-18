@@ -4,12 +4,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
-%\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[font=small,labelfont=bf]{caption}
 \usepackage[a4paper]{geometry}
 \usepackage{minted}
 \usepackage{tikz}
 \usepackage{tikz-uml}
 \usepackage[italian]{babel}
+\usepackage{tikzscale}
 
 \title{Relazione di Laboratorio - C++/ROOT}
 \author{Damiano Scevola}
@@ -35,11 +36,11 @@ Il codice è strutturato in tre classi (\texttt{ParticleType}, \texttt{Resonance
 }{
     + ParticleType(name : const string, \\
                    mass : const double, charge: const int) \\
-    + GetName() : string $\ll const \gg$ \\
-    + GetMass() : double $\ll const \gg$ \\
-    + GetCharge() : int $\ll const \gg$ \\
-    \umlvirt{+ GetWidth() : double $\ll const \gg$} \\
-    \umlvirt{+ Print() : void $\ll const \gg$}
+    + GetName() : string «const» \\
+    + GetMass() : double «const» \\
+    + GetCharge() : int «const» \\
+    \umlvirt{+ GetWidth() : double «const»} \\
+    \umlvirt{+ Print() : void «const»}
 }
 \umlclass[x=0, y=-5]{ResonanceType}{
     -- fWidth : const double
@@ -47,8 +48,8 @@ Il codice è strutturato in tre classi (\texttt{ParticleType}, \texttt{Resonance
     + ResonanceType(name : const string, \\
         mass: const double, charge: const int, \\
         width : const double) \\
-    + GetWidth() : double $\ll const \gg$ \\
-    + Print() : void $\ll const \gg$
+    + GetWidth() : double «const» \\
+    + Print() : void «const»
 }
 \umlinherit{ResonanceType}{ParticleType}
 \umlclass[x=8, y=-2]{Particle}{
@@ -63,23 +64,23 @@ Il codice è strutturato in tre classi (\texttt{ParticleType}, \texttt{Resonance
     + Particle() \\
     + Particle(particleName : string, \\
         Px : double, Py : double, Pz : double) \\
-    + GetIndex() : int $\ll const \gg$ \\
+    + GetIndex() : int «const» \\
     + GetParticleType() : \\
-        const ParticleType* $\ll const \gg$ \\
+        const ParticleType* «const» \\
     + SetIndex(index : int) : void \\
     + SetIndex(particleName : string) : void\\
-    + Print() : void $\ll const \gg$ \\
-    + GetPx() : double $\ll const \gg$ \\
-    + GetPy() : double $\ll const \gg$ \\
-    + GetPz() : double $\ll const \gg$ \\
-    + GetMass() : double $\ll const \gg$ \\
-    + TotEnergy() : double $\ll const \gg$ \\
+    + Print() : void «const» \\
+    + GetPx() : double «const» \\
+    + GetPy() : double «const» \\
+    + GetPz() : double «const» \\
+    + GetMass() : double «const» \\
+    + TotEnergy() : double «const» \\
     + InvMass(p : Particle*) : \\ 
-        double $\ll const \gg$ \\
+        double «const» \\
     + SetP(Px : double, Py : double, \\
         Pz : double) : void \\
     + Decay2Body(dau1 : Particle\&, dau2 : \\
-        Particle\&) : int $\ll const \gg$ \\
+        Particle\&) : int «const» \\
     \umlstatic{+ AddParticleType(particleName : string, } \\
     \umlstatic{mass : const double, charge : const int, } \\
     \umlstatic{width : const double = 0) : void} \\
@@ -91,7 +92,7 @@ Il codice è strutturato in tre classi (\texttt{ParticleType}, \texttt{Resonance
 \umlcompo[geometry=-|-]{Particle}{ParticleType}
 %\umlcompo[geometry=-|-, anchor1=-150]{Particle}{ResonanceType}
 \end{tikzpicture}
-\caption{Diagramma UML delle classi: \texttt{ResonanceType} eredita da \texttt{ParticleType} e \texttt{Particle} ha un attributo statico che per composizione è un array contenente istanze delle due classi precedenti. Secondo la notazione UML, i membri contrassegnati con + sono \textit{public}, quelli con - \textit{private} e quelli con \# \textit{protected}. Il tipo è indicato dopo i due punti. I membri \underline{sottolineati} sono \textit{static} e quelli \textit{corsivo} sono \textit{virtual}.}
+\caption{Diagramma UML delle classi: \texttt{ResonanceType} eredita da \texttt{ParticleType} e \texttt{Particle} ha un attributo statico che per composizione è un array contenente istanze delle due classi precedenti. Secondo la notazione UML, i membri contrassegnati con + sono \textit{public}, quelli con -- \textit{private} e quelli con \# \textit{protected}. Il tipo è indicato dopo i due punti. I membri \underline{sottolineati} sono \textit{static} e quelli \textit{corsivo} sono \textit{virtual}.}
 \label{fig:uml}
 \end{figure}
 
@@ -102,12 +103,95 @@ sono presenti i metodi getter. Sono presenti inoltre i metodi \texttt{Print()} p
 
 La classe \texttt{Particle} rappresenta, invece, una particella vera e propria, infatti sono presenti gli attributi relativi alle tre componenti dell'impulso \texttt{fPx}, \texttt{fPy} e \texttt{fPz} con i relativi metodi getter e setter. Per definire i tipi delle particelle è presente il metodo \texttt{AddParticleType}, che aggiunge un elemento (di tipo \texttt{ResonanceType} se la larghezza non è nulla, \texttt{ParticleType} altrimenti) all'array \texttt{fParticleType}. Il numero di elementi contenuti al suo interno è pari al valore di \texttt{fNParticleType}, che può arrivare al massimo a \texttt{fMaxNumParticleType}, e il contenuto dell'array può essere stampato su terminale con il metodo statico \texttt{PrintParticleTypes}. Ogni particella istanziata avrà un determinato tipo a seconda del valore dell'attributo \texttt{fIndex}, che rappresenta l'indice del tipo della particella nell'array \texttt{fParticleType} e che viene settato con il metodo \texttt{SetIndex}, di cui sono presenti due overload. Per ottenere l'indice di un tipo di particella a partire dalla stringa del suo nome è presente il metodo \texttt{FindParticle}.
 
-Oltre al metodo \texttt{Print}, che serve per stampare su terminale il tipo e l'impulso della particella, sono presenti i metodi \texttt{GetMass} e \texttt{TotEnergy}, che restituiscono rispettivamente la massa (data dal tipo) e l'energia relativistica della particella. Il metodo \texttt{InvMass}, invece, restituisce la massa invariante del sistema costituito dalla particella attuale e da quella passata come parametro. Il metodo \texttt{Decay2Body}, infine, presi come parametri per riferimento due oggetti di tipo \texttt{Particle} non inizializzati (\texttt{fIndex == -1}), simula il decadimento della particella e inserisce i dati delle figlie in questi due oggetti, richiamando il metodo \texttt{Boost} durante la procedura.
+Oltre al metodo \texttt{Print}, che serve per stampare su terminale il tipo e l'impulso della particella, sono presenti i metodi \texttt{GetMass} e \texttt{TotEnergy}, che restituiscono rispettivamente la massa (data dal tipo) e l'energia relativistica della particella. Il metodo \texttt{InvMass}, invece, restituisce la massa invariante del sistema costituito dalla particella attuale e da quella passata come parametro. Il metodo \texttt{Decay2Body}, infine, presi come parametri per riferimento due oggetti di tipo \texttt{Particle}, simula il decadimento della particella e inserisce in essi i dati delle figlie, richiamando il metodo \texttt{Boost} durante la procedura.
 
 \section{Generazione}
+All'inizio della macro \texttt{GenerateParticles} viene chiamato il metodo \texttt{AddParticleType} una volta per ognuno dei 7 tipi di particelle considerati nella simulazione. Successivamente, dopo aver dichiarato e configurato gli istogrammi da riempire durante l'esecuzione, vengono simulati $10^5$ eventi, in ognuno dei quali sono coinvolte $100$ particelle iniziali, generate casualmente secondo definite proporzioni come segue:
+\begin{itemize}
+    \item 40\% Pioni positivi ($\pi+$)
+    \item 40\% Pioni negativi ($\pi-$)
+    \item 5\% Kaoni positivi (K+)
+    \item 5\% Kaoni negativi (K--)
+    \item 4.5\% Protoni positivi (p+)
+    \item 4.5\% Protoni negativi (p--)
+    \item 1\% Kaoni risonanza (K*)
+\end{itemize}
+Per ogni particella vengono calcolate le tre componenti dell'impulso $\overrightarrow{P}=(P_x, P_y, P_z)$ a partire dalle coordinate polari $(|P|, \theta, \phi)$ generate casualmente come segue:
+\begin{itemize}
+    \item il modulo $|P|$ ha distribuzione esponenziale di valor medio $1$ GeV/c
+    \item l'angolo polare $\theta$ ha distribuzione uniforme in $[0, \pi]$
+    \item l'angolo azimutale $\phi$ ha distribuzione uniforme in $[0, 2\pi]$
+\end{itemize}
+Per calcolare le componenti di $\overrightarrow{P}$ si usano le consuete relazioni:
+\begin{align*}
+    P_x &= |P| sin \theta cos \phi \\
+    P_y &= |P| sin \theta sin \phi \\
+    P_z &= |P| cos \theta
+\end{align*}
 
+Una volta stabilito il tipo e l'impulso della particella, nel caso in cui si tratti di una K* occorre farla decadere in una delle due coppie $\{\pi+, K-\}$ o $\{\pi-, K+\}$ con uguale probabilità.
+
+Dopo aver simulato le interazioni calcolando i valori di massa invariante di tutte le possibili coppie di particelle presenti dopo i decadimenti, i dati vengono inseriti negli istogrammi e salvati in un file ROOT.
 
 \section{Analisi}
+La macro \texttt{AnalyzeData} si occupa di leggere ed elaborare il contenuto del file ROOT contenente i dati simulati mediante l'esecuzione di \texttt{GenerateParticles}. Osservando i grafici prodotti si possono effettuare le dovute considerazioni.
+
+Innanzitutto verifichiamo, come mostrato qualitativamente nell'istogramma in alto a sx in figura \ref{fig:tipi} e quantitativamente nella tabella \ref{table:tipi}, che i tipi delle particelle generate nella simulazione rispettano le proporzioni definite precedentemente, in particolare tutti i valori attesi si trovano entro $2\sigma$ dal valore osservato.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{||c|c|c||}
+        \hline
+            Specie & Occ. Osservate & Occ. Attese \\
+        \hline \hline
+            $\pi+$ & $4001420 \pm 2000$ & $4000000$ \\
+        \hline
+            $\pi-$ & $3998890 \pm 2000$ & $4000000$ \\
+        \hline
+            K+ & $499229 \pm 707$ & $500000$ \\
+        \hline
+            K- & $499292 \pm 707$ & $500000$ \\
+        \hline
+            p+ & $449712 \pm 671$ & $450000$ \\
+        \hline
+            p- & $450991 \pm 672$ & $450000$ \\
+        \hline
+            K* & $100466 \pm 317$ & $100000$ \\
+        \hline
+    \end{tabular}
+    \caption{Occorrenze osservate e attese dei tipi di particelle}
+    \label{table:tipi}
+\end{table}
+
+\begin{figure}[hb!]
+    \centering
+    \includegraphics[width=\textwidth]{histograms/typesAndMomentum}
+    \caption{In alto a sx: istogramma dei tipi di particelle generati. I tre istogrammi rimanenti raffigurano le occorrenze delle coordinate polari dell'impulso.}
+    \label{fig:tipi}
+\end{figure}
+
+Analizzando, invece, i grafici delle coordinate polari dell'impulso (sempre in figura \ref{fig:tipi}) e la relativa tabella \ref{table:impulso}, si nota come i fit delle distribuzioni siano visivamente e quantitativamente (considerando i valori dei $\chi^2$ e dei gradi di libertà) compatibili con esse. In particolare il parametro del fit esponenziale sul modulo dell'impulso risulta compatibile, entro un certo errore, con il valore impostato in fase di generazione di $1$ GeV/c.
+
+\begin{table}
+    \centering
+    \begin{tabular}{||c|c|c|c|c||}
+        \hline
+        Distribuzione & Parametri Fit & $\chi^2$ & DOF & $\chi^2$/DOF \\
+        \hline \hline
+        Angolo Polare $\theta$ & $0.3183 \pm 0.0001$ & 42.98 & 49 & 0.8771 \\
+        \hline
+        Angolo Azimutale $\phi$ & $0.1592 \pm 0.0001$ & 44.59 & 49 & 0.9100 \\
+        \hline
+        Modulo Impulso $|P|$ & $1.001 \pm 0.000$ & 540.1 & 49 & 11.0224 \\
+        \hline
+    \end{tabular}
+    \caption{Dati relativi ai fit, uniformi per le distribuzioni degli angoli direzionali, ed esponenziale per quella del modulo dell'impulso.}
+    \label{table:impulso}
+\end{table}
+
+
+
+\pagebreak
 
 \section*{Appendice}
 \subsection*{Parameters.h}
@@ -159,7 +243,7 @@ const double PROBABILITIES[] = {
     KAON_STAR_PROB
 };
 
-const string PION_PLUS_LABEL = "π+";
+const string PION_PLUS_L, trattata nella prossima sezioneABEL = "π+";
 const string PION_MINUS_LABEL = "π-";
 const string KAON_PLUS_LABEL = "K+";
 const string KAON_MINUS_LABEL = "K-";
@@ -520,7 +604,246 @@ void Particle::Boost(double bx, double by, double bz) {
 
 \subsection*{GenerateParticles.cpp}
 \begin{minted}[breaklines]{c}
+#include "Particle.h"
+
+#include "Parameters.h"
+#include "ParticleType.h"
+#include "ResonanceType.h"
+
+#include <cmath>
+#include <iostream>
+#include <TH1D.h>
+#include <TRandom3.h>
+#include <TCanvas.h>
+#include <TFile.h>
+#include <TROOT.h>
+
+void GenerateParticles() {
+    // Initialization of particle types
+    Particle::AddParticleType("π+", 0.13957, +1);
+    Particle::AddParticleType("π-", 0.13957, -1);
+    Particle::AddParticleType("K+", 0.49367, +1);
+    Particle::AddParticleType("K-", 0.49367, -1);
+    Particle::AddParticleType("p+", 0.93827, +1);
+    Particle::AddParticleType("p-", 0.93827, -1);
+    Particle::AddParticleType("K*", 0.89166, 0, 0.050);
+
+    // Histograms definitions
+    TList *histograms = new TList();
     
+    // Save histograms in root file
+    TFile *file = new TFile("histograms.root", "RECREATE");
+
+    TH1F *particleTypesH = new TH1F("particleTypesH", "Particle Types", N_PARTICLE_TYPES, 0, N_PARTICLE_TYPES);
+    particleTypesH->SetFillColor(kBlue);
+    particleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
+    particleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
+    particleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
+    particleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
+    particleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
+    particleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
+    particleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
+    particleTypesH->SetStats(false);
+    histograms->Add(particleTypesH);
+
+    TH1F *finalParticleTypesH = new TH1F("finalParticleTypesH", "Final Particle Types", N_PARTICLE_TYPES, 0, N_PARTICLE_TYPES);
+    finalParticleTypesH->SetFillColor(kBlue);
+    finalParticleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
+    finalParticleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
+    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
+    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
+    finalParticleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
+    finalParticleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
+    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
+    finalParticleTypesH->SetStats(false);
+    histograms->Add(finalParticleTypesH);
+
+    TH1D *azimutAngleH = new TH1D("azimutAngleH", "Azimut Angle Distribution", N_BINS, 0, 2 * M_PI);
+    azimutAngleH->GetXaxis()->SetTitle("Angle (rad)");
+    histograms->Add(azimutAngleH);
+
+    TH1D *polarAngleH = new TH1D("polarAngleH", "Polar Angle Distribution", N_BINS, 0, M_PI);
+    polarAngleH->GetXaxis()->SetTitle("Angle (rad)");
+    histograms->Add(polarAngleH);
+
+    TH1D *momentumH = new TH1D("momentumH", "Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
+    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
+    histograms->Add(momentumH);
+
+    TH1D *transverseMomentumH = new TH1D("transverseMomentumH", "Transverse Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
+    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
+    histograms->Add(transverseMomentumH);
+
+    TH1D *particleEnergyH = new TH1D("particleEnergyH", "Particle Energy Distribution", N_BINS, 0, MAX_ENERGY);
+    momentumH->GetXaxis()->SetTitle("Energy (GeV)");
+    histograms->Add(particleEnergyH);
+
+    TH1D *invMassH = new TH1D("invMassH", "Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    invMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    invMassH->Sumw2();
+    histograms->Add(invMassH);
+
+    TH1D *discordantInvMassH = new TH1D("discordantInvMassH", "Discordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    discordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    discordantInvMassH->Sumw2();
+    histograms->Add(discordantInvMassH);
+
+    TH1D *concordantInvMassH = new TH1D("concordantInvMassH", "Concordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    concordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    concordantInvMassH->Sumw2();
+    histograms->Add(concordantInvMassH);
+
+    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
+    discordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    discordantPionKaonInvMassH->Sumw2();
+    histograms->Add(discordantPionKaonInvMassH);
+
+    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
+    concordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    concordantPionKaonInvMassH->Sumw2();
+    histograms->Add(concordantPionKaonInvMassH);
+
+    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "Resonance Daughters Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
+    daughtersInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+    daughtersInvMassH->Sumw2();
+    histograms->Add(daughtersInvMassH);
+
+    // Variable definitions
+    Particle particles[N_PARTICLE_TYPES + MAX_PRODUCTS];
+    double phi, theta, P, rndm;
+    double Px, Py, Pz;
+    double invMass;
+
+    int nDecayedParticles;  // Counter of decayed particles
+
+    // Iterations
+    for (int i = 0; i < N_ITERATIONS; i++) {
+
+        // Reset decayed particles counter from previous iterations
+        nDecayedParticles = 0;
+
+        // Fill particles array
+        for (int j = 0; j < N_PARTICLES_PER_ITERATION; j++) {
+
+            // Random generation of momentum
+            phi = gRandom->Uniform(0, 2*M_PI);
+            theta = gRandom->Uniform(0, M_PI);
+            P = gRandom->Exp(AVG_P);
+
+            Px = P * sin(theta) * cos(phi);
+            Py = P * sin(theta) * sin(phi);
+            Pz = P * cos(theta);
+            particles[j].SetP(Px, Py, Pz);
+
+            // Random generate particle type and fill correspondent histogram
+            rndm = gRandom->Rndm();
+            if (rndm < PION_PLUS_CUMULATIVE) {
+                particles[j].SetIndex("π+");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(PION_PLUS_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(PION_PLUS_BIN));
+            } else if (rndm < PION_MINUS_CUMULATIVE) {
+                particles[j].SetIndex("π-");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(PION_MINUS_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(PION_MINUS_BIN));
+            } else if (rndm < KAON_PLUS_CUMULATIVE) {
+                particles[j].SetIndex("K+");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(KAON_PLUS_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(KAON_PLUS_BIN));
+            } else if (rndm < KAON_MINUS_CUMULATIVE) {
+                particles[j].SetIndex("K-");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(KAON_MINUS_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(KAON_MINUS_BIN));
+            } else if (rndm < PROTON_PLUS_CUMULATIVE) {
+                particles[j].SetIndex("p+");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(PROTON_PLUS_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(PROTON_PLUS_BIN));
+            } else if (rndm < PROTON_MINUS_CUMULATIVE) {
+                particles[j].SetIndex("p-");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(PROTON_MINUS_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(PROTON_MINUS_BIN));
+            } else {
+                particles[j].SetIndex("K*");
+                particleTypesH->Fill(particleTypesH->GetBinCenter(KAON_STAR_BIN));
+                finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(KAON_STAR_BIN));
+
+                // Decayment of K* in random pair (π+, K-) or (π-, K+)
+                rndm = gRandom->Rndm();
+                if (rndm < 0.5) {
+                    particles[N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles].SetIndex("π+");
+                    particles[N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles + 1].SetIndex("K-");
+                    finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(PION_PLUS_BIN));
+                    finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(KAON_MINUS_BIN));
+                } else {
+                    particles[N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles].SetIndex("π-");
+                    particles[N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles + 1].SetIndex("K+");
+                    finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(PION_MINUS_BIN));
+                    finalParticleTypesH->Fill(finalParticleTypesH->GetBinCenter(KAON_PLUS_BIN));
+                }
+                particles[j].Decay2Body(particles[N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles], particles[N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles + 1]);
+                nDecayedParticles++;
+            }
+
+            // Fill generation histograms
+            azimutAngleH->Fill(phi);
+            polarAngleH->Fill(theta);
+            momentumH->Fill(P);
+            transverseMomentumH->Fill(P * sin(theta));
+            particleEnergyH->Fill(particles[j].TotEnergy());
+        }
+
+        // Compute invariant masses and fill histograms
+        for (int j = 0; j < N_PARTICLES_PER_ITERATION + 2 * nDecayedParticles; j++) {
+            
+            // Alias particles[j] as p1
+            const ParticleType *p1 = particles[j].GetParticleType();
+
+            // Ignore K* particles for invariant mass histograms (charge == 0)
+            if (p1->GetCharge() != 0) {
+                
+                // Iterate over all previous particles in the array
+                for (int k = 0; k < j; k++) {
+                    
+                    // Alias particles[k] as p2
+                    const ParticleType *p2 = particles[k].GetParticleType();
+                    
+                    // Ignore K* particles
+                    if (p2->GetCharge() != 0) {
+
+                        // Compute invariant mass and fill histogram
+                        invMass = particles[j].InvMass(&particles[k]);
+                        invMassH->Fill(invMass);
+                        
+                        // Fill discordant or concordant charge histogram
+                        if (p1->GetCharge() != p2->GetCharge())
+                            discordantInvMassH->Fill(invMass);
+                        else
+                            concordantInvMassH->Fill(invMass);
+
+                        // Fill discordant or concordant pion-kaon histogram
+                        if (     (p1->GetName() == "π+" && p2->GetName() == "K-") ||
+                                 (p1->GetName() == "π-" && p2->GetName() == "K+") ||
+                                 (p1->GetName() == "K+" && p2->GetName() == "π-") ||
+                                 (p1->GetName() == "K-" && p2->GetName() == "π+"))
+                            discordantPionKaonInvMassH->Fill(invMass);
+                        else if ((p1->GetName() == "π+" && p2->GetName() == "K+") ||
+                                 (p1->GetName() == "π-" && p2->GetName() == "K-") ||
+                                 (p1->GetName() == "K+" && p2->GetName() == "π+") ||
+                                 (p1->GetName() == "K-" && p2->GetName() == "π-"))
+                            concordantPionKaonInvMassH->Fill(invMass);
+
+                    }
+                }
+            }
+
+            // Fill histogram with invariant masses of K* daughters
+            if (j >= N_PARTICLES_PER_ITERATION && j % 2 == 0)
+                daughtersInvMassH->Fill(particles[j].InvMass(&particles[j + 1]));
+        }
+    }
+
+    file->Write();
+    file->Close();
+}
 \end{minted}
 
 \subsection*{AnalyzeData.cpp}

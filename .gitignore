@@ -8,3 +8,4 @@ _minted*
 *.aux
 *.log
 *.gz
+*.old

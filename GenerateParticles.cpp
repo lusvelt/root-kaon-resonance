@@ -22,85 +22,31 @@ void GenerateParticles() {
     Particle::AddParticleType("p-", 0.93827, -1);
     Particle::AddParticleType("K*", 0.89166, 0, 0.050);
 
-    // Histograms definitions
-    TList *histograms = new TList();
     
     // Save histograms in root file
     TFile *file = new TFile("histograms.root", "RECREATE");
 
+    // Histograms definitions
     TH1F *particleTypesH = new TH1F("particleTypesH", "Particle Types", N_PARTICLE_TYPES, 0, N_PARTICLE_TYPES);
-    particleTypesH->SetFillColor(kBlue);
-    particleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
-    particleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
-    particleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
-    particleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
-    particleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
-    particleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
-    particleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
-    particleTypesH->SetStats(false);
-    histograms->Add(particleTypesH);
-
     TH1F *finalParticleTypesH = new TH1F("finalParticleTypesH", "Final Particle Types", N_PARTICLE_TYPES, 0, N_PARTICLE_TYPES);
-    finalParticleTypesH->SetFillColor(kBlue);
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PION_PLUS_BIN, "#pi+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PION_MINUS_BIN, "#pi-");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_PLUS_BIN, "K+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_MINUS_BIN, "K-");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PROTON_PLUS_BIN, "p+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(PROTON_MINUS_BIN, "p+");
-    finalParticleTypesH->GetXaxis()->SetBinLabel(KAON_STAR_BIN, "K*");
-    finalParticleTypesH->SetStats(false);
-    histograms->Add(finalParticleTypesH);
+    TH1D *azimutAngleH = new TH1D("azimutAngleH", "Azimut Angle", N_BINS, 0, 2 * M_PI);
+    TH1D *polarAngleH = new TH1D("polarAngleH", "Polar Angle", N_BINS, 0, M_PI);
+    TH1D *momentumH = new TH1D("momentumH", "Momentum", N_BINS, 0, MAX_MOMENTUM);
+    TH1D *transverseMomentumH = new TH1D("transverseMomentumH", "Transverse Momentum", N_BINS, 0, MAX_MOMENTUM);
+    TH1D *particleEnergyH = new TH1D("particleEnergyH", "Particle Energy", N_BINS, 0, MAX_ENERGY);
+    TH1D *invMassH = new TH1D("invMassH", "Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *discordantInvMassH = new TH1D("discordantInvMassH", "Discordant Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *concordantInvMassH = new TH1D("concordantInvMassH", "Concordant Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
+    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "Resonance Daughters Invariant Mass", N_BINS_INV_MASS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
 
-    TH1D *azimutAngleH = new TH1D("azimutAngleH", "Azimut Angle Distribution", N_BINS, 0, 2 * M_PI);
-    azimutAngleH->GetXaxis()->SetTitle("Angle (rad)");
-    histograms->Add(azimutAngleH);
-
-    TH1D *polarAngleH = new TH1D("polarAngleH", "Polar Angle Distribution", N_BINS, 0, M_PI);
-    polarAngleH->GetXaxis()->SetTitle("Angle (rad)");
-    histograms->Add(polarAngleH);
-
-    TH1D *momentumH = new TH1D("momentumH", "Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
-    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
-    histograms->Add(momentumH);
-
-    TH1D *transverseMomentumH = new TH1D("transverseMomentumH", "Transverse Momentum Distribution", N_BINS, 0, MAX_MOMENTUM);
-    momentumH->GetXaxis()->SetTitle("Momentum (GeV)");
-    histograms->Add(transverseMomentumH);
-
-    TH1D *particleEnergyH = new TH1D("particleEnergyH", "Particle Energy Distribution", N_BINS, 0, MAX_ENERGY);
-    momentumH->GetXaxis()->SetTitle("Energy (GeV)");
-    histograms->Add(particleEnergyH);
-
-    TH1D *invMassH = new TH1D("invMassH", "Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
-    invMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     invMassH->Sumw2();
-    histograms->Add(invMassH);
-
-    TH1D *discordantInvMassH = new TH1D("discordantInvMassH", "Discordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
-    discordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     discordantInvMassH->Sumw2();
-    histograms->Add(discordantInvMassH);
-
-    TH1D *concordantInvMassH = new TH1D("concordantInvMassH", "Concordant Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS, MAX_INVARIANT_MASS);
-    concordantInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     concordantInvMassH->Sumw2();
-    histograms->Add(concordantInvMassH);
-
-    TH1D *discordantPionKaonInvMassH = new TH1D("discordantPionKaonInvMassH", "Discordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
-    discordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     discordantPionKaonInvMassH->Sumw2();
-    histograms->Add(discordantPionKaonInvMassH);
-
-    TH1D *concordantPionKaonInvMassH = new TH1D("concordantPionKaonInvMassH", "Concordant Pion/Kaon Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
-    concordantPionKaonInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     concordantPionKaonInvMassH->Sumw2();
-    histograms->Add(concordantPionKaonInvMassH);
-
-    TH1D *daughtersInvMassH = new TH1D("daughtersInvMassH", "Resonance Daughters Invariant Mass Distribution", N_BINS, MIN_INVARIANT_MASS_PEAK, MAX_INVARIANT_MASS_PEAK);
-    daughtersInvMassH->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
     daughtersInvMassH->Sumw2();
-    histograms->Add(daughtersInvMassH);
 
     // Variable definitions
     Particle particles[N_PARTICLE_TYPES + MAX_PRODUCTS];
